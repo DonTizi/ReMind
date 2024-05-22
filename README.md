@@ -1,6 +1,6 @@
-# Recall - Your Digital Memory Assistant
+# reMind - Your Digital Memory Assistant
 
-Welcome to Recall! This application captures and indexes your digital activities, transcribing and summarizing them for easy recall. Recall uses advanced AI models to provide detailed summaries of your daily activities and to answer questions based on your digital history.
+Welcome to reMind! This application captures and indexes your digital activities, transcribing and summarizing them for easy reMind. reMind uses advanced AI models to provide detailed summaries of your daily activities and to answer questions based on your digital history.
 
 ## Table of Contents
 
@@ -21,12 +21,12 @@ Welcome to Recall! This application captures and indexes your digital activities
 
 ## Installation
 
-To get started with Recall, follow these steps:
+To get started with reMind, follow these steps:
 
 1. **Clone the Repository**
     ```sh
-    git clone https://github.com/your-username/recall.git
-    cd recall
+    git clone https://github.com/your-username/reMind.git
+    cd reMind
     ```
 
 2. **Set Up a Virtual Environment**
@@ -45,7 +45,6 @@ To get started with Recall, follow these steps:
 
 5. **Set Up the Electron App**
     ```sh
-    cd electron-app
     npm install
     ```
 
@@ -58,12 +57,10 @@ To get started with Recall, follow these steps:
 
 2. **Start the Electron App**
     ```sh
-    cd electron-app
-    npm start
+    npm run start
     ```
 
 3. **Interact with the Application**
-    - Open your web browser and navigate to `http://localhost:8000` to access the chat interface.
     - Use the chat interface to query your digital history or ask for summaries of your activities.
 
 ## API Endpoints
@@ -105,23 +102,9 @@ For questions or support, please open an issue in the GitHub repository or conta
 
 ---
 
-Thank you for using Recall! We hope it helps you manage and recall your digital activities effortlessly.
+Thank you for using reMind! We hope it helps you manage and reMind your digital activities effortlessly.
 
 ---
 
-### Sample Data Initialization
-
-If the `all_texts.json` file is not created, the application will initialize it with the following sample data:
-
-```json
-{
-    "date": "19 May 2024",
-    "entries": [
-        {
-            "time": "19:33",
-            "text": "Sample Data"
-        }
-    ]
-}
-By making Recall open-source, we aim to foster a collaborative environment where developers can contribute to and improve this innovative application. Happy coding!
+By making reMind open-source, we aim to foster a collaborative environment where developers can contribute to and improve this innovative application. Happy coding!
 
