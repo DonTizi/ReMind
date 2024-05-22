@@ -98,13 +98,14 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For questions or support, please open an issue in the GitHub repository or contact us at your-email@example.com.
+For questions or support, please open an issue in the GitHub repository or contact me at elyes.melbouci@gmail.com.
 
 ---
 
-Thank you for using reMind! We hope it helps you manage and reMind your digital activities effortlessly.
-
----
-
+Thank you for using reMind! We hope it helps you manage and reMind your digital activities effortlessly. 
 By making reMind open-source, we aim to foster a collaborative environment where developers can contribute to and improve this innovative application. Happy coding!
+
+
+---
+
 
