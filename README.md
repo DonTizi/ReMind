@@ -1,4 +1,4 @@
-# reMind - Your Digital Memory Assistant
+# reMind - Your Local Artificial Memory Assistant
 
 Welcome to reMind! This application captures and indexes your digital activities, transcribing and summarizing them for easy reMind. reMind uses advanced AI models to provide detailed summaries of your daily activities and to answer questions based on your digital history.
 
