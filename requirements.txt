@@ -1,0 +1,15 @@
+easyocr
+pillow
+watchdog
+pyaudio
+numpy
+pyautogui
+opencv-python
+scikit-image
+flask
+flask-socketio
+flask-cors
+langchain-community
+langchain-core
+tiktoken
+chromadb

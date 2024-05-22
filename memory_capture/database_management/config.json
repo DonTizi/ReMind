@@ -1,0 +1,7 @@
+{
+    "logging_path": "../logs/app.log",
+    "images_path": "Screenshots",
+    "transcriptions_path": "memory_capture/transcriptions",
+    "json_output_path": "../vectore/new_texts.json",
+    "db_path": "regular_data.db"
+}
