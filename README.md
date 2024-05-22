@@ -1,6 +1,6 @@
 # reMind - Your Local Artificial Memory Assistant
 
-Welcome to reMind! This application captures and indexes your digital activities, transcribing and summarizing them for easy reMind. reMind uses advanced AI models to provide detailed summaries of your daily activities and to answer questions based on your digital history.
+Welcome to reMind! This application captures and indexes your digital activities, transcribing and summarizing them for easy recall. reMind uses advanced AI models to provide detailed summaries of your daily activities and to answer questions based on your digital history.
 
 ## Table of Contents
 
@@ -47,6 +47,24 @@ To get started with reMind, follow these steps:
     ```sh
     npm install
     ```
+
+6. **Install Ollama and Set Up the LLM**
+
+    After installing Ollama, follow these steps to set up the LLM:
+
+    ```sh
+    ollama run llama3
+    ollama run nomic-embed-text
+    ollama create recallAI
+    ```
+
+    Use the following system prompt for your LLM:
+
+    ```plaintext
+    You are RecallAI, an advanced artificial memory assistant. Your primary function is to capture, index, and summarize digital activities for easy recall. You provide detailed summaries of daily activities and answer questions based on the user's digital history. Your responses should be concise, accurate, and helpful.
+    ```
+
+
 
 ## Usage
 
@@ -98,14 +116,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For questions or support, please open an issue in the GitHub repository or contact me at elyes.melbouci@gmail.com.
+For questions or support, please open an issue in the GitHub repository or contact me at [elyes.melbouci@gmail.com](mailto:elyes.melbouci@gmail.com).
 
 ---
 
-Thank you for using reMind! We hope it helps you manage and reMind your digital activities effortlessly. 
-By making reMind open-source, we aim to foster a collaborative environment where developers can contribute to and improve this innovative application. Happy coding!
-
-
----
-
-
+Thank you for using reMind! We hope it helps you manage and recall your digital activities effortlessly. By making reMind open-source, we aim to foster a collaborative environment where developers can contribute to and improve this innovative application. Happy coding!
