@@ -25,7 +25,7 @@ To get started with reMind, follow these steps:
 
 1. **Clone the Repository**
     ```sh
-    git clone https://github.com/your-username/reMind.git
+    git clone https://github.com/DonTizi/reMind.git
     cd reMind
     ```
 
