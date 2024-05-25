@@ -2,7 +2,7 @@
 
 Welcome to reMind! This application captures and indexes your digital activities, transcribing and summarizing them for easy recall. reMind uses advanced AI models to provide detailed summaries of your daily activities and to answer questions based on your digital history. It is at its first version , a more optimal and runnable version will be uploaded on mid June 2024.
 
-## A Demo of the setup and an optimal setup will be deployed for 25 May.
+## A Demo of the setup and an optimal setup will be deployed for 26th May.
 
 ## Table of Contents
 
