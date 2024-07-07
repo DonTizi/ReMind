@@ -31,7 +31,7 @@ To get started with reMind, follow these steps:
     cd reMind
     ```
     
-2. **Install Ollama **
+2. **Install Ollama**
     Download and install Ollama from [here](https://ollama.com/download/Ollama-darwin.zip).
 
 
