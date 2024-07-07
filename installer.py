@@ -73,10 +73,10 @@ Response Format:
 
 def create_and_pull_custom_model(base_dir, progress_bar):
     try:
-        progress_bar.set_description("Creating custom model")
-        run_silent_command(["ollama", "create", "-f", str(base_dir / "remind.ollama"), "Custom"], progress_bar)
-        progress_bar.set_description("Pulling custom model")
-        run_silent_command(["ollama", "pull", "Custom"], progress_bar)
+        progress_bar.set_description("Creating remind model")
+        run_silent_command(["ollama", "create", "-f", str(base_dir / "remind.ollama"), "remind"], progress_bar)
+        progress_bar.set_description("Pulling remind model")
+        run_silent_command(["ollama", "pull", "remind"], progress_bar)
     except subprocess.CalledProcessError as e:
         print(f"An error occurred while creating or pulling the custom model: {e}")
         if "pull" in str(e):
