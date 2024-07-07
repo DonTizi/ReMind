@@ -36,7 +36,7 @@ To get started with reMind, follow these steps:
 
 
 3. **Install the Remind Application**
-    Download and install the Remind application from [here](https://www.recallmemory.io/).
+    Download and install the Remind application from [here](https://www.recallmemory.io/download).
 
 
 4. **Run the Installer Script**
