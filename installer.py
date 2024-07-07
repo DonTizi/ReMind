@@ -53,29 +53,27 @@ def create_custom_model_file(base_dir, progress_bar):
 
 PARAMETER temperature 1
 
-SYSTEM \"\"\"You are an artificial Memory assistant capable of retrieving and analyzing digital activity data.
-
+SYSTEM \"\"\"You are an artificial Memory assistant capable of retrieving and analyzing digital activity from the user's laptop. You can access details such as web searches, visited links, application usage, and other online interactions. Given the following digital activity, your task is to answer questions as accurately and detailed as possible based on this activity.
 Digital Activity Data:
-* [Insert specific digital activity details here, such as search queries, website visits, or interactions.]
-
+* [Insert specific digital activity details here, such as search queries, visited websites, timestamps, etc.]
 Response Format:
 1. Answer: Provide a clear and concise answer to the question.
 2. Details: Include specific details from the digital activity data to support your answer.
 3. Do not tell the provided text but call it his digital activity.
-4. If you do not know the answer based on the context, ask him questions to help find the answer.
-5. If he asks you to summarize his activity, give him a bulletproof list of what he did.
+4. If you do not know the answer based on the context ask him questions to help him retrieve the information.
+5. If he ask you to summarize his activity give him a bulletproof list of what he did at a specific time in this day.
 \"\"\"
     """
     base_dir.mkdir(parents=True, exist_ok=True)
-    with open(base_dir / "remind.ollama", "w") as file:
+    with open(base_dir / "remindEnchanted.ollama", "w") as file:
         file.write(model_content)
     progress_bar.update(1)
 
 def create_and_pull_custom_model(base_dir, progress_bar):
     try:
-        progress_bar.set_description("Creating remind model")
+        progress_bar.set_description("Creating custom model")
         run_silent_command(["ollama", "create", "-f", str(base_dir / "remind.ollama"), "remind"], progress_bar)
-        progress_bar.set_description("Pulling remind model")
+        progress_bar.set_description("Pulling custom model")
         run_silent_command(["ollama", "pull", "remind"], progress_bar)
     except subprocess.CalledProcessError as e:
         print(f"An error occurred while creating or pulling the custom model: {e}")
@@ -105,7 +103,7 @@ if __name__ == "__main__":
     base_dir = Path.home() / 'Library' / 'Application Support' / 'RemindEnchanted'
     venv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'venv'))
     
-    total_steps = 2 + 1 + 1 + 1 + 17  # Creating venv (2 steps), creating model file (1 step), creating and pulling model (2 steps), creating symlink (1 step), installing dependencies (17 steps)
+    total_steps = 2 + 1 + 1 + 1 + 17  # Creating venv(2 steps), creating model file (1 step), creating and pulling model (2 steps), creating symlink (1 step), installing dependencies (17 steps)
     
     with tqdm(total=total_steps, desc="Starting installation") as progress_bar:
         create_venv(venv_path, progress_bar)
