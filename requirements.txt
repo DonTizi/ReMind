@@ -13,3 +13,5 @@ langchain-community
 langchain-core
 tiktoken
 chromadb
+rumps
+psutil
