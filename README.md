@@ -2,7 +2,7 @@
 
 Welcome to reMind! This application captures and indexes your digital activities, transcribing and summarizing them for easy recall. reMind uses advanced AI models to provide detailed summaries of your daily activities and to answer questions based on your digital history. It is at its first version, a more optimal and runnable version will be uploaded in mid-June 2024.
 
-## A Demo of the setup and an optimal setup will be deployed for 26th May. I just created a Discord server to allow everyone to communicate and have a better option to discuss changes with everyone. [Join the server here](https://discord.gg/fVDXVyeR).
+##  I just created a Discord server to allow everyone to communicate and have a better option to discuss changes with everyone. [Join the server here](https://discord.gg/fVDXVyeR).
 
 ## Table of Contents
 
@@ -31,7 +31,7 @@ To get started with reMind, follow these steps:
     cd reMind
     ```
     
-2. **Install Ollama **
+2. **Install Ollama**
     Download and install Ollama from [here](https://ollama.com/download/Ollama-darwin.zip).
 
 
