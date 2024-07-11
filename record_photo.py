@@ -89,6 +89,6 @@ def run_screenshot_interval(interval, duration, threshold=0.95, buffer_size=10):
 
 if __name__ == "__main__":
     interval_seconds = 2  # Interval between screenshots
-    duration_seconds = 3600  # Total duration of capture in seconds
+    duration_seconds = 86400  # Total duration of capture in seconds
     thread1 = threading.Thread(target=run_screenshot_interval, args=(interval_seconds, duration_seconds, 0.9, 10))
     thread1.start()
