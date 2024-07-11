@@ -1,5 +1,5 @@
 # Author: Elyes Rayane Melbouci
-# Purpose: This script sets up a virtual environment, installs dependencies, creates a custom model file, and sets up a symlink for managing the script as a background service.
+# Purpose: This script sets up a virtual environment, installs dependencies, creates a custom model file, and sets up a symlink for managing the script as a background service, including adding the RemindOCR executable to the system path.
 
 import os
 import subprocess
@@ -17,7 +17,7 @@ if [ "$1" = "start" ]; then
     python3 {script_path} &
     echo $! > /tmp/remind_sansprint.pid
 elif [ "$1" = "close" ]; then
-    if [ -f /tmp/remind_sansprint.pid ]]; then
+    if [ -f /tmp/remind_sansprint.pid ]; then
         kill $(cat /tmp/remind_sansprint.pid)
         rm /tmp/remind_sansprint.pid
     else
@@ -39,7 +39,7 @@ def create_venv(venv_path, progress_bar):
     run_silent_command([sys.executable, '-m', 'venv', venv_path], progress_bar)
     progress_bar.set_description("Upgrading pip")
     run_silent_command([os.path.join(venv_path, 'bin', 'pip'), 'install', '--upgrade', 'pip'], progress_bar)
-    dependencies = ['easyocr', 'pillow', 'watchdog', 'pyaudio', 
+    dependencies = ['pillow', 'watchdog', 'pyaudio', 
                     'numpy', 'pyautogui', 'opencv-python', 'scikit-image', 
                     'flask', 'flask-socketio', 'flask-cors', 'langchain-community', 
                     'langchain-core', 'tiktoken', 'chromadb', 'rumps', 'psutil', 'ollama']
@@ -88,10 +88,18 @@ def create_symlink(progress_bar):
     script_content = create_script(venv_path)
 
     try:
-        progress_bar.set_description("Creating symlink")
+        progress_bar.set_description("Creating symlink for remindbg")
         with open(script_path, 'w') as script_file:
             script_file.write(script_content)
         os.chmod(script_path, 0o755)
+        progress_bar.update(1)
+
+        progress_bar.set_description("Creating symlink for RemindOCR")
+        remindocr_source_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'RemindOCR'))
+        remindocr_symlink_path = '/usr/local/bin/RemindOCR'
+        if not os.path.exists(remindocr_symlink_path):
+            os.symlink(remindocr_source_path, remindocr_symlink_path)
+        os.chmod(remindocr_symlink_path, 0o755)
         print(f"Installation successful. Use 'remindbg start' to start and 'remindbg close' to stop the script.")
         progress_bar.update(1)
     except PermissionError:
@@ -103,7 +111,7 @@ if __name__ == "__main__":
     base_dir = Path.home() / 'Library' / 'Application Support' / 'RemindEnchanted'
     venv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'venv'))
     
-    total_steps = 2 + 1 + 1 + 1 + 17  # Creating venv(2 steps), creating model file (1 step), creating and pulling model (2 steps), creating symlink (1 step), installing dependencies (17 steps)
+    total_steps = 2 + 1 + 1 + 1 + 17 + 1  # Creating venv(2 steps), creating model file (1 step), creating and pulling model (2 steps), creating symlink for remindbg (1 step), installing dependencies (17 steps), creating symlink for RemindOCR (1 step)
     
     with tqdm(total=total_steps, desc="Starting installation") as progress_bar:
         create_venv(venv_path, progress_bar)

@@ -1,11 +1,8 @@
-# Author: Elyes Rayane Melbouci
-# Purpose: This script monitors directories for new image files, processes these images using OCR, saves the extracted text and metadata to a SQLite database and JSON file, and handles termination signals gracefully.
-
+import subprocess
 import os
 import time
 import logging
 import sqlite3
-import easyocr
 from PIL import Image, ExifTags, ImageFilter
 import PIL
 from datetime import datetime
@@ -50,9 +47,6 @@ chemin_transcriptions.mkdir(parents=True, exist_ok=True)
 json_output_path = base_dir / 'new_texts.json'
 logging.info(f"JSON output path: {json_output_path}")
 
-# Initialization of OCR reader (EasyOCR)
-reader = None
-
 # Dictionary to cache already processed files
 processed_files = {}
 
@@ -62,6 +56,7 @@ def wait_for_file_to_finish(file_path):
     while size != os.path.getsize(file_path):
         size = os.path.getsize(file_path)
         time.sleep(0.5)
+    logging.debug(f"File size stabilized for: {file_path}")
 
 def extract_date_from_image(image_path):
     """Extract date and time from image metadata."""
@@ -83,7 +78,7 @@ def preprocess_image(image_path):
         with Image.open(image_path) as img:
             img = img.resize((img.width * 2, img.height * 2), PIL.Image.LANCZOS)
             img = img.filter(ImageFilter.SHARPEN)
-            img = img.convert('RGB')  # Convert to RGB mode for EasyOCR
+            img = img.convert('RGB')  # Convert to RGB mode if needed
             return img
     except Exception as e:
         logging.error(f"Error preprocessing image {str(image_path)}: {e}")
@@ -156,7 +151,6 @@ class MyHandler(FileSystemEventHandler):
 
     def handle_file(self, file_path):
         """Process the newly created file."""
-        global reader
         if file_path in processed_files:
             return
 
@@ -164,34 +158,40 @@ class MyHandler(FileSystemEventHandler):
             wait_for_file_to_finish(file_path)
 
             if str(chemin_images) in file_path:
-                if reader is None:
-                    reader = easyocr.Reader(['fr', 'en'])
-                text = reader.readtext(file_path, detail=0, paragraph=True)
-                text = ' '.join(text)
+                logging.info(f"Processing new image file: {file_path}")
+                
+                # Call the Swift command-line tool
+                try:
+                    result = subprocess.run(["RemindOCR", file_path], capture_output=True, text=True, check=True)
+                    recognized_text = result.stdout.strip()
+                    logging.info(f"Recognized text: {recognized_text}")
 
-                # Filter text to remove noise
-                filtered_text = ' '.join([word for word in text.split() if len(word) > 1])
+                    # Save to JSON
+                    date_time = extract_date_from_image(file_path)
+                    if not date_time:
+                        date_time = datetime.now()
+                    date_str = date_time.strftime("%d %b %Y")
+                    time_str = date_time.strftime("%H:%M")
 
-                date_time = extract_date_from_image(file_path)
-                if not date_time:
-                    date_time = datetime.now()
-                date_str = date_time.strftime("%d %b %Y")
-                time_str = date_time.strftime("%H:%M")
+                    image_data = {
+                        "image": None,  # Not inserting the image in the database
+                        "date": date_str,
+                        "time": time_str,
+                        "text": recognized_text
+                    }
 
-                image_data = {
-                    "image": None,  # Not inserting the image in the database
-                    "date": date_str,
-                    "time": time_str,
-                    "text": filtered_text
-                }
+                    logging.debug(f"Processed data: {image_data}")
 
-                logging.debug(f"Processed data: {image_data}")
+                    save_to_db_and_json(image_data, json_output_path)
 
-                save_to_db_and_json(image_data, json_output_path)
+                    # Mark the file as processed
+                    processed_files[file_path] = True
+                    gc.collect()  # Collect garbage to free up memory
 
-                # Mark the file as processed
-                processed_files[file_path] = True
-                gc.collect()  # Collect garbage to free up memory
+                except subprocess.CalledProcessError as e:
+                    logging.error(f"OCR process failed: {e}")
+                except Exception as e:
+                    logging.error(f"Error processing file: {e}")
 
         except Exception as e:
             logging.error(f"Error processing file {str(file_path)}: {e}")
@@ -213,15 +213,3 @@ try:
         time.sleep(1)  # Avoid a busy-wait loop
 except KeyboardInterrupt:
     handle_termination(signal.SIGINT, None)
-
-# Adding Chroma import and function calls
-from langchain_community.vectorstores import Chroma
-
-def ensure_str_metadata(metadatas):
-    """Convert all metadata values to strings."""
-    for metadata in metadatas:
-        for key, value in metadata.items():
-            if isinstance(value, Path):
-                metadata[key] = str(value)
-            elif not isinstance(value, (str, int, float, bool)):
-                metadata[key] = str(value)

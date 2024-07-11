@@ -106,7 +106,7 @@ def pipeline():
             if not running:
                 break
             run_script(scripts[script])
-        time.sleep(1200)
+        time.sleep(10)
 
 # Function to stop all processes
 def stop_all_processes():

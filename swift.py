@@ -1,6 +1,3 @@
-# Author: Elyes Rayane Melbouci
-# Purpose: This script sets up a Flask application with Socket.IO and CORS support to load, index, and query documents using LangChain's document loaders and vector stores.
-
 import os
 import time
 import threading
@@ -94,7 +91,7 @@ def load_and_index_documents_incrementally():
         print("Documents added to vector store and persisted")
 
         retriever = vectorstore.as_retriever()
-        print("Retriever initialized")
+        print("Retriever initialized successfully")
     except Exception as e:
         print(f"Error during load_and_index_documents: {e}")
 
