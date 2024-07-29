@@ -2,16 +2,15 @@
 
 Welcome to reMind! This application captures and indexes your digital activities, transcribing and summarizing them for easy recall. reMind uses advanced AI models to provide detailed summaries of your daily activities and to answer questions based on your digital history. It is at its first version, a more optimal and runnable version will be uploaded in mid-June 2024.
 
-##  I just created a Discord server to allow everyone to communicate and have a better option to discuss changes with everyone. [Join the server here](https://discord.gg/fVDXVyeR).
 
 ## Table of Contents
 
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [API Endpoints](#api-endpoints)
 - [Contributing](#contributing)
 - [License](#license)
+- [Contact](#contact)
 
 ## Features
 
@@ -25,28 +24,17 @@ Welcome to reMind! This application captures and indexes your digital activities
 
 To get started with reMind, follow these steps:
 
-1. **Clone the Repository**
-    ```sh
-    git clone https://github.com/DonTizi/reMind.git
-    cd reMind
-    ```
-    
-2. **Install Ollama**
-    Download and install Ollama from [here](https://ollama.com/download/Ollama-darwin.zip).
-
-
-3. **Install the Remind Application**
+1. **Install the Remind Application**
     Download and install the Remind application from [here](https://www.recallmemory.io/download).
 
-
-4. **Run the Installer Script**
-    To perform the installation, run the following command in the directory of the cloned repository:
+2. **Install Ollama**
+    Download and install Ollama from [here](https://ollama.com/download/Ollama-darwin.zip).
+    In the terminal, run the command:
     ```sh
-    python installer.py
-    ```
+    ollama run llama3
+    ```   
 
 ## Usage
-
 
 1. **Launch the RemindEnchanted Background Service**
     In the terminal, run the command:
@@ -56,7 +44,6 @@ To get started with reMind, follow these steps:
 
 2. **Interact with the Application**
     Launch the Remind application to ask questions about your digital activity. Please wait for about 20-30 minutes the first time to allow the application to gather digital activities into its vector database.
-
 
 ## Contributing
 
