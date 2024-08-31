@@ -24,9 +24,12 @@ Welcome to reMind! This application captures and indexes your digital activities
 - **Summarization**: Provides detailed summaries of daily activities.
 - **Interactive Chat**: Interact with the application using a chat interface to query your digital history.
 
-# How to setup Remind
+# How to Setup Remind
 
-(Include the preview video link here)
+[![How to Setup Remind](https://img.youtube.com/vi/6HyN4Jsmmug/0.jpg)](https://www.youtube.com/watch?v=6HyN4Jsmmug&t=7s)
+
+Click the image above or [here](https://www.youtube.com/watch?v=6HyN4Jsmmug&t=7s) to watch the full video on how to set up Remind.
+
 
 # Requisites ⚙️
 
