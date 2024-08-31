@@ -37,7 +37,7 @@ To use the RemindAI, these requisites must be met:
 3. Download Ollama. (and pull llama3.1) [Download](https://ollama.com/)
 4. Download Python. [Download](https://www.python.org//)
 
-2. **Interact with the Application**
+**Interact with the Application**
     Launch the Remind application to ask questions about your digital activity. Please wait for about 20-30 minutes the first time to allow the application to gather digital activities into its vector database.
 
 ## Contributing
@@ -53,7 +53,7 @@ We welcome contributions from the community! To contribute:
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the apache License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 
