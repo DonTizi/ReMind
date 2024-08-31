@@ -1,16 +1,20 @@
-# reMind - Your Local Artificial Memory Assistant
+<div align="center">
+  <img src="remindai-ui.gif" alt="RemindAI UI Preview">
+</div>
 
-Welcome to reMind! This application captures and indexes your digital activities, transcribing and summarizing them for easy recall. reMind uses advanced AI models to provide detailed summaries of your daily activities and to answer questions based on your digital history. It is at its first version, a more optimal and runnable version will be uploaded in mid-June 2024.
+<h1 align="center">
+  RemindAI - Your AI Memory agent
+</h1>
+
+<div align="center">
+  
+![GitHub Repo stars](https://img.shields.io/github/stars/dontizi/remind)
+  
+</div>
+
+Welcome to reMind! This application captures and indexes your digital activities, transcribing and summarizing them for easy recall. reMind uses advanced AI models to provide detailed summaries of your daily activities and to answer questions based on your digital history.
 
 
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
 ## Features
 
@@ -20,27 +24,18 @@ Welcome to reMind! This application captures and indexes your digital activities
 - **Summarization**: Provides detailed summaries of daily activities.
 - **Interactive Chat**: Interact with the application using a chat interface to query your digital history.
 
-## Installation
+# How to setup Remind
 
-To get started with reMind, follow these steps:
+(Include the preview video link here)
 
-1. **Install the Remind Application**
-    Download and install the Remind application from [here](https://www.recallmemory.io/download).
+# Requisites ⚙️
 
-2. **Install Ollama**
-    Download and install Ollama from [here](https://ollama.com/download/Ollama-darwin.zip).
-    In the terminal, run the command:
-    ```sh
-    ollama run llama3
-    ```   
+To use the RemindAI, these requisites must be met:
 
-## Usage
-
-1. **Launch the RemindEnchanted Background Service**
-    In the terminal, run the command:
-    ```sh
-    remindbg start
-    ```
+1. Download the repo.
+2. Node.js (18+) and npm are required. [Download](https://nodejs.org/en/download)
+3. Download Ollama. (and pull llama3.1) [Download](https://ollama.com/)
+4. Download Python. [Download](https://www.python.org//)
 
 2. **Interact with the Application**
     Launch the Remind application to ask questions about your digital activity. Please wait for about 20-30 minutes the first time to allow the application to gather digital activities into its vector database.
@@ -58,7 +53,7 @@ We welcome contributions from the community! To contribute:
 
 ## License
 
-This project is licensed under the apache-2.0 License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 
@@ -67,3 +62,4 @@ For questions or support, please open an issue in the GitHub repository or conta
 ---
 
 Thank you for using reMind! We hope it helps you manage and recall your digital activities effortlessly. By making reMind open-source, we aim to foster a collaborative environment where developers can contribute to and improve this innovative application. Happy coding!
+
