@@ -36,7 +36,7 @@ To use the RemindAI, these requisites must be met:
 ## Before You Begin
 
 1. **Clone the repository:**
-   - Use the command `git clone <repository_url>` to clone the repository to your local machine.
+   - Use the command `git clone https://github.com/DonTizi/ReMind/` to clone the repository to your local machine.
 
 2. **Install the necessary modules:**
    - Navigate to the project directory and run `npm install` to install all required dependencies.
