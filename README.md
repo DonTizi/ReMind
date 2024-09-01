@@ -24,10 +24,6 @@ Welcome to reMind! This application captures and indexes your digital activities
 - **Summarization**: Provides detailed summaries of daily activities.
 - **Interactive Chat**: Interact with the application using a chat interface to query your digital history.
 
-# How to setup Remind
-
-(Include the preview video link here)
-
 # Requisites ⚙️
 
 To use the RemindAI, these requisites must be met:
@@ -37,8 +33,29 @@ To use the RemindAI, these requisites must be met:
 3. Download Ollama. (and pull llama3.1) [Download](https://ollama.com/)
 4. Download Python. [Download](https://www.python.org//)
 
-2. **Interact with the Application**
-    Launch the Remind application to ask questions about your digital activity. Please wait for about 20-30 minutes the first time to allow the application to gather digital activities into its vector database.
+## Before You Begin
+
+1. **Clone the repository:**
+   - Use the command `git clone https://github.com/DonTizi/ReMind/` to clone the repository to your local machine.
+
+2. **Install the necessary modules:**
+   - Navigate to the project directory and run `npm install` to install all required dependencies.
+
+3. **Start the server:**
+   - After the installation is complete, run `npm run dev` to start the server.
+
+Once these steps are completed, you can follow along with the video to finish setting up Remind.
+
+
+
+# How to Setup Remind
+
+[![How to Setup Remind](https://img.youtube.com/vi/6HyN4Jsmmug/0.jpg)](https://www.youtube.com/watch?v=6HyN4Jsmmug&t=7s)
+
+Click the image above or [here](https://www.youtube.com/watch?v=6HyN4Jsmmug&t=7s) to watch the full video on how to set up Remind.
+
+**Interact with the Application**
+    Launch the Remind application to ask questions about your digital activity. Please wait for about 30 minutes the first time to allow the application to gather digital activities into its vector database.
 
 ## Contributing
 
@@ -53,7 +70,7 @@ We welcome contributions from the community! To contribute:
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the apache License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 
