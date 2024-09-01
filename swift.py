@@ -1,183 +1,170 @@
-import os
-import time
-import threading
-import json
+import logging
+from pathlib import Path
 from flask import Flask, request, jsonify
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 from flask_cors import CORS
-from langchain_community.document_loaders import TextLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import OllamaEmbeddings
+from langchain_community.llms import Ollama
+from langchain.chains import RetrievalQA
 from langchain.schema import Document
-from pathlib import Path
-import sys
+from datetime import datetime, timedelta
+import json
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS
-socketio = SocketIO(app, cors_allowed_origins="*")  # Allow all origins (adjust if needed)
+CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-    return os.path.join(base_path, relative_path)
-
-# Path to the persistent directory
 base_dir = Path.home() / 'Library' / 'Application Support' / 'RemindEnchanted'
-base_dir.mkdir(parents=True, exist_ok=True)
-
-# Path to the JSON file
-json_file_path = base_dir / 'all_texts.json'
-
-# Persistent directory for the vector store
 persist_directory = base_dir / 'vectoreDB'
 persist_directory.mkdir(parents=True, exist_ok=True)
 
-vectorstore = None  # Initialize vectorstore to None
-retriever = None  # Initialize retriever to None
+embedding_model = OllamaEmbeddings(model='nomic-embed-text')
+llm = Ollama(model="llama3.1")
+vectorstore = None
+retriever = None
+qa_chain = None
 
-def load_and_index_documents_incrementally():
-    global retriever  # Declare retriever as global
-    global vectorstore  # Declare vectorstore as global
-
-    print("Starting load_and_index_documents_incrementally")
-
+def initialize_vectorstore():
+    global vectorstore, retriever, qa_chain
     try:
-        # Initialize the embedding model
-        embedding_model = OllamaEmbeddings(model='nomic-embed-text')
-
-        # Load existing vector store if it exists
         if persist_directory.exists():
-            print(f"Loading existing vector store from {persist_directory}")
+            logging.info("Loading existing vector store")
             vectorstore = Chroma(persist_directory=str(persist_directory), embedding_function=embedding_model)
+            logging.info("Existing vector store loaded successfully")
         else:
-            print("Creating a new vector store")
+            logging.info("Creating new vector store")
             vectorstore = Chroma(embedding_function=embedding_model, persist_directory=str(persist_directory))
-
-        # Ensure the JSON file exists
-        if not json_file_path.exists():
-            print(f"JSON file not found: {json_file_path}")
-            return None
-
-        print(f"Loading JSON file from {json_file_path}")
-
-        # Load new documents from JSON file
-        with json_file_path.open('r') as f:
-            transcriptions = json.load(f)
-
-        print(f"Loaded {len(transcriptions)} transcriptions")
-
-        docs = []
-        for entry in transcriptions:
-            date = entry["date"]
-            for item in entry["entries"]:
-                time = item["time"]
-                text = item["text"]
-                full_text = f"Date: {date}, Time: {time}\n{text}"
-                docs.append(Document(page_content=full_text))
-
-        print(f"Created {len(docs)} documents")
-
-        # Split documents into chunks
-        text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(chunk_size=7500, chunk_overlap=2500)
-        doc_splits = text_splitter.split_documents(docs)
-
-        print(f"Split documents into {len(doc_splits)} chunks")
-
-        # Add new documents to the existing vector store
-        vectorstore.add_documents(doc_splits)
-        vectorstore.persist()
-
-        print("Documents added to vector store and persisted")
-
-        retriever = vectorstore.as_retriever()
-        print("Retriever initialized successfully")
+            logging.info("New vector store created successfully")
+        
+        retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
+        qa_chain = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
+        logging.info("Retriever and QA chain initialized successfully")
     except Exception as e:
-        print(f"Error during load_and_index_documents: {e}")
+        logging.error(f"Error initializing vector store: {e}", exc_info=True)
 
-# Load and index documents initially
-print("Initial load and indexing")
-load_and_index_documents_incrementally()
-
-def summarize_day(date):
-    print(f"Summarizing day for date: {date}")
+def add_new_document(text, metadata):
+    global vectorstore
     try:
-        if not retriever:
-            print("Retriever is not initialized")
-            return "Retriever is not initialized. Ensure documents are loaded and indexed."
-
-        query = f"Date: {date}"
-        results = retriever.invoke(query)
-
-        print(f"Found {len(results)} results for query: {query}")
-
-        # Ensure results are of type Document
-        if all(isinstance(doc, Document) for doc in results):
-            input_docs = results
-        else:
-            input_docs = [Document(page_content=str(text)) for text in results if isinstance(text, str)]
-
-        context = "\n\n".join(doc.page_content for doc in input_docs)
-
-        return context
-
+        doc = Document(page_content=text, metadata=metadata)
+        vectorstore.add_documents([doc])
+        vectorstore.persist()
+        logging.info("New document added to the vector store")
     except Exception as e:
-        print(f"Error during summarize_day: {e}")
-        return "There was an error summarizing the day."
+        logging.error(f"Error adding new document: {e}", exc_info=True)
+
+def classify_question(question):
+    prompt = f"""Determine if the following question requires searching a knowledge base about the user's personal information and activities, or if it can be answered with general knowledge.
+
+Question: {question}
+
+If the question is about the user's personal information, activities, or anything that would require searching a personal knowledge base, respond with "SEARCH_REQUIRED".
+If the question can be answered with general knowledge or does not require personal information, respond with "GENERAL_KNOWLEDGE".
+
+Response:"""
+
+    response = llm(prompt)
+    return "SEARCH_REQUIRED" in response
+
+def determine_time_range(question):
+    prompt = f"""Analyze the following question and determine the time range it refers to.
+
+Question: {question}
+
+Respond with one of the following:
+- TODAY: if the question refers to today or the current day
+- YESTERDAY: if the question refers to yesterday
+- WEEK: if the question refers to the current week or the past 7 days
+- MONTH: if the question refers to the current month or the past 30 days
+- ALL: if no specific time range is mentioned or if it refers to a longer period
+
+Response:"""
+
+    response = llm(prompt).strip().upper()
+    return response if response in ["TODAY", "YESTERDAY", "WEEK", "MONTH"] else "ALL"
+
+def get_date_range(time_range):
+    today = datetime.now().date()
+    if time_range == "TODAY":
+        return today, today
+    elif time_range == "YESTERDAY":
+        yesterday = today - timedelta(days=1)
+        return yesterday, yesterday
+    elif time_range == "WEEK":
+        start_of_week = today - timedelta(days=today.weekday())
+        return start_of_week, today
+    elif time_range == "MONTH":
+        start_of_month = today.replace(day=1)
+        return start_of_month, today
+    else:
+        return None, None  # For "ALL" or undefined ranges
+
+def filter_documents_by_date(docs, start_date, end_date):
+    if start_date is None or end_date is None:
+        return docs
+    return [
+        doc for doc in docs 
+        if start_date <= datetime.strptime(doc.metadata.get('date', '1970-01-01'), '%Y-%m-%d').date() <= end_date
+    ]
 
 @app.route('/')
 def index():
-    print("Received request on /")
     return "Chat application is running!"
 
-@app.route('/index', methods=['POST'])
-def index_endpoint():
-    print("Received request on /index")
-    try:
-        data = request.json
-        print("Data received for indexing")
-        with json_file_path.open('w') as f:
-            json.dump(data, f)
-        print("Data written to JSON file")
-        load_and_index_documents_incrementally()
-        return jsonify({"status": "success"}), 200
-    except Exception as e:
-        print(f"Error in /index endpoint: {e}")
-        return jsonify({"status": "error", "message": str(e)}), 500
+@app.route('/add', methods=['POST'])
+def add_document():
+    data = request.json
+    text = data.get('text')
+    metadata = data.get('metadata', {})
+    if not text:
+        return jsonify({"status": "error", "message": "No text provided"}), 400
+    
+    # Ensure the metadata includes the current date
+    metadata['date'] = datetime.now().strftime('%Y-%m-%d')
+    
+    add_new_document(text, metadata)
+    return jsonify({"status": "success", "message": "Document added successfully"}), 200
 
 @app.route('/query', methods=['POST'])
 def query_endpoint():
-    print("Received request on /query")
+    if not qa_chain or not llm:
+        return jsonify({"status": "error", "message": "QA chain or LLM not initialized. Check server logs for details."}), 500
+
+    query_text = request.json.get('query')
     try:
-        if not retriever:
-            print("Retriever is not initialized")
-            return jsonify({"status": "error", "message": "Retriever is not initialized. Ensure documents are loaded and indexed."}), 500
+        if classify_question(query_text):
+            # Question requires searching the knowledge base
+            time_range = determine_time_range(query_text)
+            start_date, end_date = get_date_range(time_range)
+            relevant_docs = retriever.invoke(query_text)
+            filtered_docs = filter_documents_by_date(relevant_docs, start_date, end_date)
+            
+            if filtered_docs:
+                # Generate a response that interprets what you might have been doing
+                context = "\n".join([doc.page_content for doc in filtered_docs])
+                ai_response = qa_chain.run(f"Given the following context: \n\n{context}\n\n Answer the question: '{query_text}' by interpreting what the user was likely doing with this information.")
+                ai_response = ai_response
+            else:
+                ai_response = f"I couldn't find any relevant information for the specified time range ({time_range.lower()} - {start_date} to {end_date}). Could you please rephrase your question or specify a different time range?"
+            
+            context = [doc.page_content for doc in filtered_docs]
+        else:
+            # Question can be answered with general knowledge
+            ai_response = llm(query_text)
+            context = []
 
-        query_text = request.json.get('query')
-        print(f"Query received: {query_text}")
-        results = retriever.invoke(query_text)
-        context = "\n\n".join(doc.page_content for doc in results)
-        
-        # Generate a response based on the context
-        response_text = f"The context is: {context}. Your query was: {query_text}. Here is the response based on the context."
-        print("Query processed successfully")
-
-        return jsonify({"results": [response_text]}), 200
+        return jsonify({
+            "status": "success",
+            "results": [ai_response],
+            "context": context
+        }), 200
     except Exception as e:
-        print(f"Error in /query endpoint: {e}")
-        return jsonify({"status": "error", "message": str(e)}), 500
-
-def periodic_reload(interval=1800):
-    while True:
-        print(f"Periodic reload every {interval} seconds")
-        time.sleep(interval)
-        load_and_index_documents_incrementally()
-
-# Start the periodic reloading in a separate thread
-print("Starting periodic reload thread")
-thread = threading.Thread(target=periodic_reload, daemon=True)
-thread.start()
+        logging.error(f"Error processing query: {e}")
+        return jsonify({"status": "error", "message": "An error occurred while processing the query."}), 500
 
 if __name__ == '__main__':
-    print("Server is up and running!")
-    app.run(host='0.0.0.0', port=8005, debug=False)
+    initialize_vectorstore()
+    logging.info("Server is starting...")
+    socketio.run(app, host='0.0.0.0', port=8005, debug=False)
