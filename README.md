@@ -55,7 +55,7 @@ Once these steps are completed, you can follow along with the video to finish se
 Click the image above or [here](https://www.youtube.com/watch?v=6HyN4Jsmmug&t=7s) to watch the full video on how to set up Remind.
 
 **Interact with the Application**
-    Launch the Remind application to ask questions about your digital activity. Please wait for about 20-30 minutes the first time to allow the application to gather digital activities into its vector database.
+    Launch the Remind application to ask questions about your digital activity. Please wait for about 30 minutes the first time to allow the application to gather digital activities into its vector database.
 
 ## Contributing
 
