@@ -144,7 +144,7 @@ def query_endpoint():
             if filtered_docs:
                 # Generate a response that interprets what you might have been doing
                 context = "\n".join([doc.page_content for doc in filtered_docs])
-                ai_response = qa_chain.run(f"Given the following context: \n\n{context}\n\n Answer the question: '{query_text}' by interpreting what the user was likely doing with this information.")
+                ai_response = qa_chain.run(f"Given the following context: \n\n{context}\n\n Answer the question: '{query_text}' by interpreting what the user was likely doing with this information. Answer specifically the question about the specific subject with the context you have and nothing else.")
                 ai_response = ai_response
             else:
                 ai_response = f"I couldn't find any relevant information for the specified time range ({time_range.lower()} - {start_date} to {end_date}). Could you please rephrase your question or specify a different time range?"
