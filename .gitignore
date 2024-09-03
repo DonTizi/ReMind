@@ -1,3 +1,8 @@
 node_modules/
 .venv/
 venv/
+
+.DS_Store
+.next/
+
+package-lock.json
