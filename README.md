@@ -8,8 +8,15 @@
 
 <div align="center">
   
-![GitHub Repo stars](https://img.shields.io/github/stars/dontizi/remind)
+  ![GitHub Repo stars](https://img.shields.io/github/stars/dontizi/remind)
   
+</div>
+
+<div align="center">
+  <a href="https://discord.gg/fgm2Mf8h9n" target="_blank">Join our Discord</a> |
+  <a href="https://www.youtube.com/@RemindAI" target="_blank">Watch on YouTube</a> |
+  <a href="https://www.linkedin.com/company/remind-ai" target="_blank">LinkedIn</a> |
+  <a href="https://trello.com/b/1djO3jge/remind" target="_blank">View Roadmap</a>
 </div>
 
 Welcome to reMind! This application captures and indexes your digital activities, transcribing and summarizing them for easy recall. reMind uses advanced AI models to provide detailed summaries of your daily activities and to answer questions based on your digital history.
