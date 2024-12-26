@@ -21,6 +21,11 @@
 
 Welcome to reMind! This application captures and indexes your digital activities, transcribing and summarizing them for easy recall. reMind uses advanced AI models to provide detailed summaries of your daily activities and to answer questions based on your digital history.
 
+## Distribution
+- A first version for macOS is now available for download
+- The beautiful UI & App is powered by [Enchanted](https://github.com/AugustDev/enchanted), created by AugustDev
+
+## Features
 
 
 ## Features
@@ -79,9 +84,15 @@ We welcome contributions from the community! To contribute:
 
 This project is licensed under the apache License. See the [LICENSE](LICENSE) file for details.
 
+
+## Acknowledgments
+- UI and App powered by [Enchanted](https://github.com/AugustDev/enchanted) by AugustDev
+
 ## Contact
 
 For questions or support, please open an issue in the GitHub repository or contact me at [elyes.melbouci@gmail.com](mailto:elyes.melbouci@gmail.com).
+
+
 
 ---
 
